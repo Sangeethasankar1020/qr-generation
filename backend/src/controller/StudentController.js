@@ -2,6 +2,7 @@ import { createStudent, findStudentByEmail } from "../service/StudentSevice.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import StudentModel from "../models/StudentModel.js";
+import QRCode from "qrcode";
 
 const registerStudent = async (req, res) => {
   const { name, email, password } = req.body;
@@ -33,6 +34,10 @@ const loginStudent = async (req, res) => {
           "jwt-refresh-token-secret-key",
           { expiresIn: "20m" }
         );
+        // generate QR code
+
+        const qrCodeDataURL = await QRCode.toDataURL(accessToken);
+        console.log("Generated QR Code:", qrCodeDataURL);
 
         // Set cookies
         res.cookie("accessToken", accessToken, {
@@ -48,7 +53,7 @@ const loginStudent = async (req, res) => {
           sameSite: "strict",
         });
 
-        return res.json({ loginStudent: true });
+        return res.json({ loginStudent: true, qrCode: qrCodeDataURL });
       } else {
         return res
           .status(401)

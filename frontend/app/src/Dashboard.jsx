@@ -9,6 +9,7 @@ const Dashboard = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [qrCode, setQrCode] = useState(""); //state to hold Qr Code
   const navigate = useNavigate();
 
   axios.defaults.withCredentials = true;
@@ -26,6 +27,7 @@ const Dashboard = () => {
         if (res.data.valid) {
           setMessage(res.data.message);
           setUsers(res.data.users || []); // Ensure users is an array
+          setQrCode(res.data.qrCode); //set the qr code
         } else {
           navigate("/");
         }
@@ -64,6 +66,13 @@ const Dashboard = () => {
       <button onClick={handleLogout} className="btn btn-danger">
         Logout
       </button>
+      {qrCode && (
+        <div>
+          <h3>Your QR Code:</h3>
+          <img src={qrCode} alt="QR Code"></img>
+        </div>
+      )}
+
       <table>
         <thead>
           <tr>

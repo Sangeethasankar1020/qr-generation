@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage ,setErrorMessage]=useState() //state to hold error
+  const [errorMessage, setErrorMessage] = useState(); //state to hold error
   const navigate = useNavigate();
 
   axios.defaults.withCredentials = true;
@@ -29,6 +29,7 @@ const Login = () => {
       const cookieValue = Cookies.get("accessToken");
       console.log("Cookie Value:", cookieValue);
       if (res.data.loginStudent) {
+        localStorage.setItem("qrCode", res.data.qrCode);
         navigate("/dashboard");
       } else {
         alert(res.data.message || "Login failed");
@@ -37,7 +38,7 @@ const Login = () => {
     } catch (err) {
       console.error("Login error:", err);
       // alert("An error occurred");
-      setErrorMessage(err.response?.data?.message || "An error occurred")
+      setErrorMessage(err.response?.data?.message || "An error occurred");
     }
   };
 
@@ -48,14 +49,12 @@ const Login = () => {
     >
       <div className="bg-white p-3 rounded" style={{ width: "300px" }}>
         <h2 className="text-center">Login</h2>
-        
+
         {errorMessage && (
           <div className="alert alert-danger text-center" role="alert">
             {errorMessage}
           </div>
         )}
-
-
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">

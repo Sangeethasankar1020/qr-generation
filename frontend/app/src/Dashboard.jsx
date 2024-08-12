@@ -27,7 +27,7 @@ const Dashboard = () => {
         if (res.data.valid) {
           setMessage(res.data.message);
           setUsers(res.data.users || []); // Ensure users is an array
-          setQrCode(res.data.qrCode); //set the qr code
+          setQrCode(localStorage.getItem("qrCode")); //set the qr code
         } else {
           navigate("/");
         }

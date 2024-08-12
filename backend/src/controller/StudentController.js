@@ -36,7 +36,9 @@ const loginStudent = async (req, res) => {
         );
         // generate QR code
 
-        const qrCodeDataURL = await QRCode.toDataURL(accessToken);
+        const qrCodeDataURL = await QRCode.toDataURL(
+          JSON.stringify({ email: student.email, name: student.name })
+        );
         console.log("Generated QR Code:", qrCodeDataURL);
 
         // Set cookies
@@ -71,6 +73,9 @@ const loginStudent = async (req, res) => {
 const dashboard = async (req, res) => {
   try {
     const users = await StudentModel.find({});
+    const qrCodeDataURL = await QRCode.toDataURL(
+      JSON.stringify({ email: req.email, timestamp: new Date() })
+    ); //QR Code regenerate each time
     res.json({ valid: true, message: "Authorized", users });
   } catch (error) {
     console.error("Login error:", error.message);
